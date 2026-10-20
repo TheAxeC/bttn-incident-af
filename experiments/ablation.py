@@ -1,7 +1,7 @@
 """Robustness / ablation suite for the BTTN incident-AF result.
 
 Runs on the CACHED spectral cohort tensor (reuses bench.load_cohort_tensor so labels align
-with the cache; no waveform extraction). Reports AUROC@1yr mean±sd over seeds + patient-
+with the cache; no waveform extraction). Reports AUROC@1yr mean +/- sd over seeds + patient-
 bootstrap CI for:
   --mode K        : block-count sensitivity (K = 4/8/12/16/24) - the main interpretability knob
   --mode horizon  : 1/2/5-yr (via the survival cohort + multihorizon, see that script)
@@ -43,7 +43,7 @@ def main(mode, source, horizon, neg_ratio, seeds):
         for K in K_GRID:
             m, sd, _ = cv_scores(X, coh, K, seeds)
             rows.append({"K": K, "auroc": round(m, 3), "sd": round(sd, 3)})
-            print(f"  K={K:2d}: AUROC {m:.3f} ± {sd:.3f}")
+            print(f"  K={K:2d}: AUROC {m:.3f} +/- {sd:.3f}")
         df = pd.DataFrame(rows)
     else:
         raise SystemExit("use multihorizon.py for the horizon ablation")

@@ -50,7 +50,7 @@ def main(source, horizon, neg_ratio, seeds):
         pa = np.mean([roc_auc_score(y, probe[s]) for s in range(seeds)])
         rows.append({"variant": name, "full_auroc": round(fa, 3), "full_sd": round(fsd, 3),
                      "probe_auroc": round(pa, 3), "faithfulness": round(pa / fa, 3)})
-        print(f"  {name:9s} full {fa:.3f}±{fsd:.3f}  probe {pa:.3f}  faithfulness {pa/fa:.3f}")
+        print(f"  {name:9s} full {fa:.3f}+/-{fsd:.3f}  probe {pa:.3f}  faithfulness {pa/fa:.3f}")
     df = pd.DataFrame(rows); df.to_csv(config.RESULTS_DIR / "arch_sweep.csv", index=False)
     print(df.to_string(index=False)); print("[saved] results/arch_sweep.csv")
 

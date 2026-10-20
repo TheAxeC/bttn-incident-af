@@ -106,7 +106,7 @@ def main(source="icd"):
                 ax.axvspan(ms - STEP_MS / 2, ms + STEP_MS / 2, color="crimson", alpha=0.6 * imp)
         ax.set_title(LEADS[l], fontsize=8, loc="left"); ax.set_yticks([])
         ax.axvline(0, color="gray", lw=0.5, ls=":")
-    fig.suptitle(f"Beat-aligned BTTN saliency, energy-normalized (mean of {n} high-risk pre-AF sinus ECGs) — red = drives future-AF risk per unit signal energy", fontsize=11)
+    fig.suptitle(f"Beat-aligned BTTN saliency, energy-normalized (mean of {n} high-risk pre-AF sinus ECGs): red = drives future-AF risk per unit signal energy", fontsize=11)
     fig.supxlabel("time relative to R-peak (ms)")
     fig.tight_layout(); fig.savefig(config.RESULTS_DIR / "beat_saliency.png", dpi=140)
     print("[saved] results/beat_saliency.png + beat_saliency_segments.csv")

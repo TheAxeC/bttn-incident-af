@@ -30,9 +30,9 @@ from pathlib import Path
 # Paths  (data under ~/data; results live inside code/results - see ../../README.md)    #
 # --------------------------------------------------------------------------- #
 MIMIC_ECG_DIR = Path("~/data/mimic-ecg").expanduser()      # record_list.csv, machine_measurements.csv
-# ECG waveform archive: on the HPC it lives at ~/data/archive/ (34 GB matched subset); on Axel's Mac it is
-# ~/Downloads/. Default to the HPC location (where the runs happen); override with AFNET_ECG_ZIP elsewhere.
-MIMIC_ECG_ZIP = Path(os.environ.get("AFNET_ECG_ZIP", "~/data/archive/mimic-iv-ecg-diagnostic-electrocardiogram-matched-subset-1.0.zip")).expanduser()
+# ECG waveform archive (34 GB matched subset): it lives in the dataset's folder, ~/data/mimic-ecg/, on
+# every machine; override with AFNET_ECG_ZIP elsewhere.
+MIMIC_ECG_ZIP = Path(os.environ.get("AFNET_ECG_ZIP", "~/data/mimic-ecg/mimic-iv-ecg-diagnostic-electrocardiogram-matched-subset-1.0.zip")).expanduser()
 # hosp module: PhysioNet-canonical layout is ~/data/mimic-iv/hosp (full module lives there on the HPC);
 # override with AFNET_HOSP_DIR if the three files (diagnoses_icd/admissions/patients .csv.gz) live elsewhere.
 MIMIC_HOSP_DIR = Path(os.environ.get("AFNET_HOSP_DIR", "~/data/mimic-iv/hosp")).expanduser()

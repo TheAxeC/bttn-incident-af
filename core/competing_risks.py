@@ -92,4 +92,4 @@ if __name__ == "__main__":
     # among those with AF or censored (death is competing -> treat as censored for AF C-index)
     ci = concordance_index(t[te], -cif_af, af_event)
     print(f"[competing-risks synthetic] final loss {loss.item():.3f}  AF cause C-index {ci:.3f}  "
-          f"(>0.5 ⇒ learns AF risk under competing death)")
+          f"(>0.5 means it learns AF risk under competing death)")

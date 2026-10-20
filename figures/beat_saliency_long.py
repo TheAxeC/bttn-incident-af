@@ -114,7 +114,7 @@ def main(source="icd"):
                     cax.axvspan(ms - STEP_MS / 2, ms + STEP_MS / 2, color="crimson", alpha=0.6 * saln[c] / smax)
             tto = (onset[sid] - row.ecg_time).days
             cax.set_title(f"pt {sid}  ({tto}d before onset)", fontsize=8); cax.set_yticks([])
-    fig.suptitle("Example pre-AF trajectories — lead II, energy-normalized BTTN saliency (red drives risk)")
+    fig.suptitle("Example pre-AF trajectories: lead II, energy-normalized BTTN saliency (red drives risk)")
     fig.supxlabel("ms relative to R-peak"); fig.tight_layout()
     fig.savefig(config.RESULTS_DIR / "beat_saliency_long_examples.png", dpi=140)
     print("[saved] results/beat_saliency_long_examples.png")

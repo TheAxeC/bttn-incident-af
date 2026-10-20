@@ -97,7 +97,7 @@ def main(task, seeds):
     ax[0].bar(freqs, fimp, width=freqs[1] - freqs[0]); ax[0].set_title(f"PTB-XL {task} freq importance (AUROC {base:.3f})")
     ax[0].set_xlabel("Hz"); ax[0].set_ylabel("AUROC drop")
     ax[1].barh(config.LEAD_NAMES, limp); ax[1].invert_yaxis(); ax[1].set_title("lead importance")
-    fig.suptitle("External validation on PTB-XL — does the glass-box substrate reproduce MIMIC?")
+    fig.suptitle("External validation on PTB-XL: does the glass-box substrate reproduce MIMIC?")
     fig.tight_layout(); fig.savefig(config.RESULTS_DIR / f"external_ptbxl_{task}.png", dpi=140)
     print("top freq:", impf.sort_values("importance", ascending=False).head(4).to_dict("records"))
     print("top leads:", impl.sort_values("importance", ascending=False).head(4).to_dict("records"))

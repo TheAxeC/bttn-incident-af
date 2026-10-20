@@ -35,9 +35,9 @@ fail() { echo "[run_all] MISSING PREREQUISITE: $1" >&2; echo "  fix: $2" >&2; ex
   "build it once on a login node from requirements.txt, then pack it:
      python3 -m venv /tmp/\$USER/afnet_env && /tmp/\$USER/afnet_env/bin/pip install --no-cache-dir -r $ROOT/requirements.txt
      tar czf $ENV_TARBALL -C /tmp/\$USER afnet_env
-   (torch must match the cluster CUDA; see requirements.txt + HPC-UTwente-howto.md)"
+   (torch must match the cluster CUDA; see requirements.txt + docs/HPC-UTwente-howto.md)"
 
-ECG_ZIP="${AFNET_ECG_ZIP:-$DATA/archive/mimic-iv-ecg-diagnostic-electrocardiogram-matched-subset-1.0.zip}"
+ECG_ZIP="${AFNET_ECG_ZIP:-$DATA/mimic-ecg/mimic-iv-ecg-diagnostic-electrocardiogram-matched-subset-1.0.zip}"
 [ -f "$ECG_ZIP" ] || fail "MIMIC-IV-ECG waveform zip ($ECG_ZIP)" \
   "download the credentialed 'MIMIC-IV-ECG matched subset 1.0' from PhysioNet to that path (or set AFNET_ECG_ZIP)"
 
@@ -51,22 +51,40 @@ done
   "extract record_list.csv + machine_measurements.csv from the MIMIC-IV-ECG release into $DATA/mimic-ecg/"
 [ -d "$DATA/code15" ]  || echo "[run_all] NOTE: $DATA/code15 not found -> the CODE-15 external step will fail; download CODE-15 there to include it." >&2
 
-# PTB-XL (public): extract the COMPLETE record set to a canonical raw dir, then point $DATA/ptb-xl at
-# it. Keying on ptb-xl-raw (not $DATA/ptb-xl) and always repointing the symlink means any stale/partial
-# pre-existing ptb-xl download is superseded, so the SR-vs-AF cohort is built from the full records.
-PTBXL_ZIP="${AFNET_PTBXL_ZIP:-$DATA/archive/ptb-xl-1.0.3.zip}"
+# PTB-XL (public): the zip PhysioNet serves lives in $DATA/ptb-xl under PhysioNet's own name, $P.zip,
+# and holds one top folder, $P. Its database and 100 Hz records are extracted into $DATA/ptb-xl
+# itself with that folder stripped, so ptbxl_database.csv and records100/ sit at the folder's top,
+# where every reader expects them. A file already there is kept, and the database is written last,
+# so its presence means the records before it are complete.
 P="ptb-xl-a-large-publicly-available-electrocardiography-dataset-1.0.3"
-if [ ! -f "$DATA/ptb-xl-raw/$P/ptbxl_database.csv" ]; then
+PTBXL_ZIP="${AFNET_PTBXL_ZIP:-$DATA/ptb-xl/$P.zip}"
+if [ ! -f "$DATA/ptb-xl/ptbxl_database.csv" ]; then
   if [ -f "$PTBXL_ZIP" ]; then
-    echo "[run_all] extracting PTB-XL (database + 100 Hz records) from $PTBXL_ZIP (one-time) ..."
-    unzip -q -n "$PTBXL_ZIP" "$P/ptbxl_database.csv" "$P/records100/*" -d "$DATA/ptb-xl-raw"
+    echo "[run_all] extracting PTB-XL (database + 100 Hz records) from $PTBXL_ZIP into $DATA/ptb-xl (one-time) ..."
+    python3 - "$PTBXL_ZIP" "$DATA/ptb-xl" "$P" <<'PY'
+import os
+import shutil
+import sys
+import zipfile
+
+zip_path, out, top = sys.argv[1], sys.argv[2], sys.argv[3] + "/"
+with zipfile.ZipFile(zip_path) as archive:
+    wanted = []
+    for info in archive.infolist():
+        rel = info.filename[len(top):] if info.filename.startswith(top) else ""
+        if not info.is_dir() and (rel == "ptbxl_database.csv" or rel.startswith("records100/")):
+            wanted.append((rel == "ptbxl_database.csv", rel, info))
+    for _, rel, info in sorted(wanted, key=lambda one: one[0]):
+        target = os.path.join(out, rel)
+        if os.path.exists(target):
+            continue
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        with archive.open(info) as source, open(target, "wb") as sink:
+            shutil.copyfileobj(source, sink)
+PY
   else
     echo "[run_all] NOTE: no PTB-XL zip at $PTBXL_ZIP -> the PTB-XL external step will fail; download PTB-XL 1.0.3 from PhysioNet." >&2
   fi
-fi
-if [ -f "$DATA/ptb-xl-raw/$P/ptbxl_database.csv" ]; then
-  [ -L "$DATA/ptb-xl" ] || rm -rf "$DATA/ptb-xl"     # drop a stale partial real-dir download
-  ln -sfn "$DATA/ptb-xl-raw/$P" "$DATA/ptb-xl"
 fi
 
 # --------------------------------------------------------------------------- #

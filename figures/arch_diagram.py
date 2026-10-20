@@ -70,7 +70,7 @@ for ax in axes:
 
 # ---------------- ROW 1: BTTR ----------------
 ax = axes[0]
-ax.text(0.2, 6.5, "BTTR (Faes 2022): supervised block-term tensor regression — linear, deflation-fit",
+ax.text(0.2, 6.5, "BTTR (Faes 2022): supervised block-term tensor regression: linear, deflation-fit",
         fontsize=12.5, fontweight="bold", color=BLUE)
 cube(ax, 1, 1.5, 2.2, 2.6, 1.6, label=r"$\mathcal{X}$", dim=(r"$I_1$", r"$I_2$", r"$I_3$"))
 ax.text(4.6, 3.0, "=", fontsize=20, ha="center")
@@ -81,16 +81,16 @@ arrow(ax, (17.5, 3.0), (19.2, 3.0))
 ax.text(22.2, 3.3, r"$\hat{y}=\sum_k b_k\,\mathbf{t}_k$", fontsize=13, ha="center", color=BLUE)
 ax.text(22.2, 2.4, "LINEAR score\n(one LS target)", fontsize=8.5, ha="center", va="top", color="#555")
 ax.add_patch(Rectangle((24.6, 1.8), 5.0, 2.4, fc="#dbe7f0", ec=BLUE, lw=1.4))
-ax.text(27.1, 3.0, "interpretable\nblock maps  ✓\n\nbut: linear,\nno time-to-event", ha="center", va="center", fontsize=9)
+ax.text(27.1, 3.0, "interpretable\nblock maps  (yes)\n\nbut: linear,\nno time-to-event", ha="center", va="center", fontsize=9)
 
 # ---------------- ROW 2: BTTN ----------------
 ax = axes[1]
-ax.text(0.2, 6.5, "BTTN (this work): same block STRUCTURE → learnable, nonlinear, survival network",
+ax.text(0.2, 6.5, "BTTN (this work): same block STRUCTURE, now learnable, nonlinear, survival network",
         fontsize=12.5, fontweight="bold", color=GREEN)
 cube(ax, 1, 1.5, 2.2, 2.6, 1.6, label=r"$\mathcal{X}$", dim=(r"freq", r"time", r"lead"),
      top="#cfe3cf", front="#bcd8bc", side="#9cc39c")
 ax.text(0.2, 0.7, "spectrogram tensor", fontsize=8, color="#555")
-ax.text(4.6, 3.0, "↦", fontsize=20, ha="center")
+ax.text(4.6, 3.0, r"$\mapsto$", fontsize=20, ha="center")
 block(ax, 6.0, 2.2, "bttn")
 ax.text(10.7, 3.0, r"$+\ \cdots\ +$", fontsize=15, ha="center")
 block(ax, 12.5, 2.2, "bttn")
@@ -109,10 +109,10 @@ ax.text(27.7, 1.95, "Cox survival risk\n1 / 2 / 5 yr", ha="center", va="top", fo
 
 # what-changes band
 fig.text(0.5, 0.02,
-         "WHAT CHANGES   BTTR → BTTN:   deflation/ACE fit → end-to-end gradient    |    "
-         "static score vector $\\mathbf{t}_k$ → learned multi-scale temporal conv $\\Psi_k$    |    "
-         "linear $\\hat y$ → attention + nonlinear head    |    least-squares → Cox survival (multi-horizon)    "
-         "[ RETAINED: per-block freq $\\mathbf{A}_k$ · lead $\\mathbf{C}_k$ glass-box maps ]",
+         "WHAT CHANGES   BTTR to BTTN:   deflation/ACE fit becomes end-to-end gradient    |    "
+         "static score vector $\\mathbf{t}_k$ becomes learned multi-scale temporal conv $\\Psi_k$    |    "
+         "linear $\\hat y$ becomes attention + nonlinear head    |    least-squares becomes Cox survival (multi-horizon)    "
+         "[ RETAINED: per-block freq $\\mathbf{A}_k$ and lead $\\mathbf{C}_k$ glass-box maps ]",
          ha="center", fontsize=9.2,
          bbox=dict(boxstyle="round,pad=0.5", fc="#fbf3e7", ec="#caa84a"))
 fig.suptitle("From BTTR to BTTN", fontsize=15, fontweight="bold", y=0.98)

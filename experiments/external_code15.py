@@ -93,7 +93,7 @@ def main(task, seeds):
     fig, ax = plt.subplots(1, 2, figsize=(12, 4))
     ax[0].bar(freqs, fimp, width=freqs[1] - freqs[0]); ax[0].set_title(f"CODE-15 {task} freq importance (AUROC {auc:.3f}, n={len(y)})")
     ax[0].set_xlabel("Hz"); ax[1].barh(config.LEAD_NAMES, limp); ax[1].invert_yaxis(); ax[1].set_title("lead importance")
-    fig.suptitle("External validation on CODE-15 — does the glass-box substrate reproduce MIMIC?")
+    fig.suptitle("External validation on CODE-15: does the glass-box substrate reproduce MIMIC?")
     fig.tight_layout(); fig.savefig(config.RESULTS_DIR / f"external_code15_{task}.png", dpi=140)
     impf = pd.DataFrame({"hz": np.round(freqs, 1), "imp": fimp}).sort_values("imp", ascending=False)
     impl = pd.DataFrame({"lead": config.LEAD_NAMES, "imp": limp}).sort_values("imp", ascending=False)

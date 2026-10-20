@@ -18,6 +18,7 @@ run_all.sh is the single documented entry point; after the graph COMPLETES, `pyt
 the schematic and the figures/tables are already in code/results/.
 
 Figure -> script -> manuscript:
+    pipeline_overview.png    figures/pipeline_overview.py       end-to-end pipeline overview (local, no data)
     bttr_vs_bttn.png         figures/arch_diagram.py            method schematic (local, no data)
     bttn_interpret.png       experiments/interpret_bttn.py      glass-box substrate map (P-wave 2 Hz / f-wave 4-8 Hz; leads I/II/V1/V5)
     clin_eval.png            experiments/clin_eval.py           calibration + decision curve + risk deciles (true-incidence PPV/NNM)
@@ -41,7 +42,8 @@ import sys
 
 def main():
     env = dict(os.environ, PYTHONPATH=os.path.dirname(os.path.abspath(__file__)))
-    print("== regenerate the method schematic (Fig 1, local, no data) ==", flush=True)
+    print("== regenerate the local schematics (pipeline overview + method schematic; no data) ==", flush=True)
+    subprocess.run([sys.executable, "figures/pipeline_overview.py"], check=True, env=env)
     subprocess.run([sys.executable, "figures/arch_diagram.py"], check=True, env=env)
     print("\nDONE (schematic). The headline numbers + the remaining figures/tables are produced by the "
           "full pipeline: bash run_all.sh (credentialed 34 GB cohort + GPU). See this file's header for the map.")

@@ -78,7 +78,7 @@ def main():
             if rec is not None:
                 sig, sal, base = saliency_one(model, stats, rec)
                 overlay(sig, sal, "saliency_ecg.png",
-                        f"BTTN saliency on a high-risk pre-AF sinus ECG (risk={base:.2f}) — red = drives AF risk")
+                        f"BTTN saliency on a high-risk pre-AF sinus ECG (risk={base:.2f}): red = drives AF risk")
                 break
 
     # (B) longitudinal: mean per-lead saliency by time-to-onset, across top-risk case patients
